@@ -159,6 +159,23 @@ def analyze_achievements(message):
         logger.error(f"Ошибка при анализе данных: {e}")
         bot.reply_to(message, "Произошла ошибка при анализе достижений.")
 
+        # Обработка всех ошибок и неверных команд
+@bot.message_handler(func=lambda message: True)
+def handle_invalid_command(message):
+    try:
+        # Если команда не распознана
+        if message.text.startswith('/'):
+            bot.reply_to(message, f"Неизвестная команда: {message.text}\n"
+                                  "Пожалуйста, используйте одну из доступных команд:\n"
+                                  "/start, /game, /top, /setgenre, /news, /analis")
+        else:
+            # Обработка любых других сообщений
+            bot.reply_to(message, "Я пока не умею отвечать на такие сообщения. Попробуйте ввести команду.")
+    except Exception as e:
+        logger.error(f"Ошибка обработки сообщения: {e}")
+        bot.reply_to(message, "Произошла ошибка при обработке вашего сообщения.")
+
+
 # Запуск бота
 if __name__ == "__main__":
     bot.polling()
